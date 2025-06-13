@@ -1,0 +1,4 @@
+./PaddleOCR
+
+# Datasets
+PaddleOCR_Training/ocr_output/line_images/*
