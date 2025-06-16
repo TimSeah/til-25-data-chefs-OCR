@@ -1,112 +1,61 @@
-# TIL-25 Data Chefs - OCR Challenge
+# Optical Character Recognition (OCR) Challenge - Data Chefs @ TIL-25 Hackathon
 
-**Hackathon:** TIL-25 Hackathon
-**Team:** Data Chefs
-**Author:** lolkabash
+This repository (`lolkabash/til-25-data-chefs-OCR`) contains the code, models, notebooks, and scripts developed by **Team Data Chefs** for the Optical Character Recognition (OCR) challenge of the DSTA BrainHack TIL-AI 2025. Our goal was to accurately identify and extract text from various documents.
 
-## 📖 Description
+The development work involved a mix of Python scripting, Jupyter Notebooks for experimentation, and Shell scripts for automation.
 
-This repository contains the solution for the OCR (Optical Character Recognition) challenge as part of the TIL-25 Hackathon. The primary goal was to train an effective OCR model.
+## 📝 Challenge Description
 
-*(You can add more specific details about the challenge problem here if you like.)*
+The OCR challenge required us to develop a system capable of identifying and extracting textual content from a variety of document images.
 
-## 💻 Technologies Used
+## 🔗 Repository Links
 
-*   **Python:** Core programming language for model development and scripting.
-*   **Jupyter Notebook:** Used for experimentation, data exploration, and model training iterations.
-*   **Shell Scripts:** For automation of tasks like data preprocessing, training initiation, etc.
-*   **PaddleOCR:** For the initial pretrained model and finetuning.
-*   **OpenCV, NumPy, Pandas, Matplotlib, PyTorch/TensorFlow**
+*   **This Repository:** [lolkabash/til-25-data-chefs-OCR](https://github.com/lolkabash/til-25-data-chefs-OCR)
+*   **Main Team Repository:** For an overview of our entire TIL-25 Hackathon project and other challenges, please visit [lolkabash/til-25-data-chefs](https://github.com/lolkabash/til-25-data-chefs).
 
-## ⚙️ Working Process & Solution
+## 💻 Key Technologies We Used
 
-This section outlines the general steps taken to address the OCR challenge.
+*   **PaddleOCR (v2.10.0):** Our core OCR engine for text detection, recognition, and layout analysis.
+*   **Python:** The primary language for scripting, model training, and inference logic.
+*   **Jupyter Notebooks:** Utilized extensively for experimentation, data exploration, and model development iterations.
+*   **Shell Scripts:** Employed for automating tasks such as dataset management, training pipelines, and other repetitive processes.
+*   **OpenCV (`opencv-python-headless`):** Leveraged for various image processing tasks.
+*   **NumPy:** For efficient numerical computations, particularly with image data.
+*   **Docker:** Used for creating consistent environments for dataset construction and model deployment (though specific Dockerfiles for this repo might be found in the main competition structure).
+*   **FastAPI & Uvicorn:** Integrated for serving our OCR model as an API endpoint within the competition framework.
 
-### 1. Data Collection & Preparation
-*   **Dataset Used:** (Describe the dataset(s) used, e.g., public datasets, custom collected data. Mention size, type of images, etc.)
-*   **Preprocessing:** (Detail the steps taken to clean and prepare the images for the OCR model, e.g., resizing, noise reduction, binarization, augmentation.)
-*   **Labeling:** (If custom data was used, how was it labeled? E.g., tools used like LabelImg, or programmatic approaches.)
+## ✨ Our Solution & Key Achievements
 
-### 2. Model Selection & Architecture
-*   **Model Choice:** (Explain why a particular OCR model or architecture was chosen. E.g., CRNN, ViT-based models, specific pre-trained models.)
-*   **Architecture Details:** (Briefly describe the model architecture if it was custom or significantly modified.)
-*   **Pre-trained Models:** (Specify if any pre-trained weights were used as a starting point, e.g., from PaddleOCR model zoo.)
+Our approach to the OCR challenge centered on leveraging the PaddleOCR framework, implementing a multi-stage pipeline for robust text extraction:
 
-### 3. Training Process
-*   **Environment Setup:** (Briefly mention the environment, e.g., local machine specs, cloud VM, specific Python/library versions.)
-*   **Training Configuration:** (Key hyperparameters, loss functions, optimizers, batch size, number of epochs.)
-*   **Fine-tuning:** (If a pre-trained model was used, describe the fine-tuning strategy.)
-*   **Challenges Faced:** (Any significant challenges during training and how they were overcome.)
+1.  **Layout Analysis:** We used the `picodet_lcnet_x1_0_fgd_layout_infer` model to understand the overall structure and organization of the documents.
+2.  **Text Detection:** The `en_PP-OCRv3_det_infer` model was employed to accurately locate text regions within the images.
+3.  **Text Direction Classification:** We utilized `ch_ppocr_mobile_v2.0_cls_infer` to determine the orientation of the detected text.
+4.  **Text Recognition:** Initially, we used the `en_PP-OCRv4_rec_infer` model for converting image text into character strings.
 
-### 4. Evaluation
-*   **Metrics Used:** (How was the model performance measured? E.g., Character Error Rate (CER), Word Error Rate (WER), accuracy, precision, recall.)
-*   **Validation Strategy:** (How was the model validated during training? E.g., validation set, cross-validation.)
-*   **Test Set Performance:** (Results on the final test set.)
+### Finetuning for Enhanced Performance
 
-### 5. Results & Key Findings
-*   **Final Model Performance:** (Summarize the best results achieved.)
-*   **Insights:** (Any interesting insights gained from the process or results.)
-*   **Visualizations:** (Consider linking to or embedding examples of OCR output if possible.)
+To significantly boost the accuracy of the text recognition stage, we undertook a finetuning process for the `en_PP-OCRv4_rec_train` recognition model. This was a critical step in adapting the model to the specific characteristics of the competition dataset. Key aspects of our finetuning procedure included:
 
-## 🚀 Setup and Usage
+*   **Custom Character Set:** We curated a `custom_char_dict.txt` file, tailoring the vocabulary to the characters observed in the challenge data.
+*   **Dataset:**
+    *   Training Data: `rec_gt_train.txt`
+    *   Evaluation Data: `rec_gt_eval.txt`
+    *   Max Text Length: Configured to 128 characters.
+*   **Training Parameters:**
+    *   Epochs: 100
+    *   Optimizer: Adam
+    *   Learning Rate Scheduler: Cosine Annealing
+    *   Initial Learning Rate: 0.0001
+    *   Warmup: 2 epochs
+    *   Batch Size: 64 per GPU
+*   **Model Architecture:**
+    *   Recognition Algorithm: SVTR (Vision Transformer)
+    *   Backbone: MobileNetV1Enhance
+    *   Head: CTCHead with CTCLoss
+*   **Preprocessing:**
+    *   Images were resized to `[3, 48, 320]` (Channels, Height, Width).
+    *   Standard normalization techniques were applied.
+*   **Initialization:** The finetuning process commenced from the `best_accuracy` checkpoint of the pre-trained `en_PP-OCRv4_rec_train` model.
 
-### Prerequisites
-*   Python version 3.10+
-*   Git & Git LFS
-*   CUDA version 12.2.1+
-
-### Installation
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/lolkabash/til-25-data-chefs-OCR.git
-    cd til-25-data-chefs-OCR
-    ```
-2.  (If Git LFS was used for model files, etc.)
-    ```bash
-    git lfs pull
-    ```
-3.  Install dependencies:
-    ```bash
-    # conda env create -f environment.yml
-    # conda activate your_env_name
-    ```
-
-### Running the Code
-*   **Data Preparation:**
-    ```bash
-    # e.g., python scripts/prepare_data.py
-    ```
-*   **Training:**
-    *(Explain how to run the training scripts or notebooks.)*
-    ```bash
-    # e.g., python train_ocr.py --config configs/my_config.yaml
-    # or jupyter notebook PaddleOCR_Training/CreateLabel.ipynb (based on previous interactions)
-    ```
-*   **Inference/Prediction:**
-    *(Explain how to use the trained model for predictions.)*
-    ```bash
-    # e.g., python predict.py --image_path path/to/image.png --model_path path/to/model
-    ```
-
-## 📁 File Structure
-```
-til-25-data-chefs-OCR/
-├── PaddleOCR_Training/         # Main training scripts, notebooks, and model files (as per previous interactions)
-│   ├── CreateLabel.ipynb
-│   └── pretrained_models/
-│       └── en_PP-OCRv4_rec_train/
-│           ├── best_accuracy.pdparams
-│           └── best_accuracy.pdopt
-├── configs/                    # Configuration files for training
-├── data/                       # Placeholder for datasets (ensure .gitignore if data is large and not in LFS)
-├── notebooks/                  # Jupyter notebooks for exploration, analysis
-├── scripts/                    # Utility scripts (data preprocessing, evaluation)
-├── src/                        # Source code for model, utilities
-├── .gitattributes              # For Git LFS tracking
-├── .gitignore
-└── README.md
-```
-
-## 🙏 Acknowledgements
-*   Mention any datasets, pre-trained models, or codebases that were particularly helpful.
-*   Thank you to my Data Chef teammates: Darren, Freddie, and Felix, for whom without this challenge would not have been possible.
+This meticulous finetuning process was instrumental in improving our model's performance on the competition's OCR tasks, leading to more accurate text extraction. The scripts and notebooks related to this finetuning process can be found within this repository.
