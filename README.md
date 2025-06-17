@@ -1,6 +1,6 @@
 # Optical Character Recognition (OCR) Challenge - Data Chefs @ TIL-25 Hackathon
 
-This repository (`lolkabash/til-25-data-chefs-OCR`) contains the code, models, notebooks, and scripts developed by **Team Data Chefs** for the Optical Character Recognition (OCR) challenge of the DSTA BrainHack TIL-AI 2025. Our goal was to accurately identify and extract text from various documents.
+This repository (`TimSeah/til-25-data-chefs-OCR`) contains the code, models, notebooks, and scripts developed by **Team Data Chefs** for the Optical Character Recognition (OCR) challenge of the DSTA BrainHack TIL-AI 2025. Our goal was to accurately identify and extract text from various documents.
 
 The development work involved a mix of Python scripting, Jupyter Notebooks for experimentation, and Shell scripts for automation.
 
@@ -10,8 +10,8 @@ The OCR challenge required us to develop a system capable of identifying and ext
 
 ## 🔗 Repository Links
 
-*   **This Repository:** [lolkabash/til-25-data-chefs-OCR](https://github.com/lolkabash/til-25-data-chefs-OCR)
-*   **Main Team Repository:** For an overview of our entire TIL-25 Hackathon project and other challenges, please visit [lolkabash/til-25-data-chefs](https://github.com/lolkabash/til-25-data-chefs).
+*   **This Repository:** [TimSeah/til-25-data-chefs-OCR](https://github.com/TimSeah/til-25-data-chefs-OCR)
+*   **Main Team Repository:** For an overview of our entire TIL-25 Hackathon project and other challenges, please visit [TimSeah/til-25-data-chefs](https://github.com/TimSeah/til-25-data-chefs).
 
 ## 💻 Key Technologies We Used
 
